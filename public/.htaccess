@@ -1,11 +1,12 @@
+# Activer la réécriture d'url
 RewriteEngine On
 
-# dynamically setup base URI
+# Configuration de base de l'URL
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE_URI:%1]
 
-# redirect every request to index.php
-# and give the relative URL in "_url" GET param
+# Renvoie tout vers index.php
+# Les paramètres de l'url seront contenus dans un paramètre _url qui contiendra une chaîne de caractères
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
