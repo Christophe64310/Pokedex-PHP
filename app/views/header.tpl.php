@@ -15,8 +15,8 @@
             <h1>Pokédex</h1>
                 <nav>
                     <ul class="navbar-links">
-                        <li><a href="#">Liste</a></li>
-                        <li><a href="#">Type</a></li>
+                        <li><a href="<?= $absoluteURL ?>/">Liste</a></li>
+                        <li><a href="<?= $absoluteURL ?>/types">Type</a></li>
                     </ul>
                  </nav>
         </div>

@@ -4,8 +4,8 @@
             <?php foreach($viewData["pokemons"] as $key => $pokemon): ?>
                 <li>
                     <a href="#">
-                        <img src="<?= $absoluteURL ?>/img/<?= $pokemon->getnumber() ?>.png" alt="photo1">
-                        <span class="pokemon-name">#<?= $pokemon->getnumber() ?> <?= $pokemon->getname() ?></span>
+                        <img src="<?= $absoluteURL ?>/img/<?= $pokemon->getNumber() ?>.png" alt="photo1">
+                        <span class="pokemon-name">#<?= $pokemon->getNumber() ?> <?= $pokemon->getName() ?></span>
                     </a>
                 </li>
             <?php endforeach; ?>

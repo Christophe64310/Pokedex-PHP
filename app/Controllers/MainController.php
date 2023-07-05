@@ -12,7 +12,10 @@
 
         public function typespage(){
             // var_dump("affichage de la page créateurs");
-            $this->show('types');  
+            $typeModel = new Type();
+            $typesFromModel = $typeModel->findAll();
+            $this->show('types' ,["types" =>$typesFromModel]); 
+            
         }
 
         public function pageNotFound() {
