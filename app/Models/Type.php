@@ -1,56 +1,46 @@
 <?php
 
-    class Type extends CoreModel{
+namespace Pokedex\Models;
 
-       //les propriétés: 
-       
-       private $color;
+use Pokedex\Utils\Database;
+use PDO;
 
-       // les actives records:
+class Type extends CoreModel
+{
 
-     public function findAll(){
+    /** 
+     * Propriétés stockant les informations du type
+     */
+    private $color;
 
-       $sql = 'SELECT `id`, `name`, `color` FROM `type`';
+    /**
+     * Création de getters  (pas besoin de setters pour notre utilisation !
+     * afin de récupérer les valeurs des propriétés
+     */
 
-       $pdo = Database::getPDO();
-
-           $pdoStatement = $pdo->query($sql);
-
-           $types = $pdoStatement ->fetchAll(PDO::FETCH_CLASS, 'Type');
-
-           return $types;
-       }
-
-       public function find($id){
-           $sql = 'SELECT * FROM `type` WHERE id = '.$id;
-           $pdo = Database::getPDO();
-
-           $pdoStatement = $pdo->query($sql);
-
-           $type = $pdoStatement ->fetchObject('Type');
-
-           return $type;
-
-        }
-
-
-       /**
-        * Get the value of color
-        */ 
-       public function getColor()
-       {
-              return $this->color;
-       }
-
-       /**
-        * Set the value of color
-        *
-        * @return  self
-        */ 
-       public function setColor($color)
-       {
-              $this->color = $color;
-
-              return $this;
-       }
+    public function getColor()
+    {
+        return $this->color;
     }
+
+    /** 
+     * Méthode permettant de récupérer la liste des types
+     */
+    public function findAll()
+    {
+        $sql = "SELECT *
+                FROM `type` 
+                ORDER BY `name`";
+
+        // On récupère la connexion à la BDD
+        $pdo = Database::getPDO();
+
+        // On exécute la requête
+        $pdoStatement = $pdo->query($sql);
+
+        // On récupère tous les résultats avec "fetchAll" et on met transmet les données récupérées à une instance du model courant (Pokemon)
+        $types = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
+
+        return $types;
+    }
+}

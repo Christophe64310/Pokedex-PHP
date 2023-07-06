@@ -1,78 +1,47 @@
-<?php
+<?php 
 
-    // require autoload
-    require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
-    //  require de la base de donnée
+require __DIR__ . '/../app/utils/Database.php';
 
-    require __DIR__ . '/../app/utils/Database.php';
-    
+// On crée un objet $router avec AltoRouter
+$router = new AltoRouter();
+// La clé BASE_URI a été créée via le .htaccess
+$router->setBasePath($_SERVER['BASE_URI']);
+// On utilise cet objet pour mapper les routes et les associer à nos contrôleurs
+// Pour indiquer le nom du contrôleur et celui de la méthode associée à la route,
+// on utilise ici une chaîne de caractères et un séparateur '#' :
+// MainController#home => Controller#method
+// 'home' => nom de la route
 
-    // require controllers
-    require __DIR__ . '/../app/Controllers/HomeController.php';
-    require __DIR__ . '/../app/Controllers/MainController.php';
+$router->map('GET','/', 'MainController#list', 'home');
+$router->map('GET','/detail/[i:numero]', 'MainController#detail', 'detail');
+$router->map('GET','/types', 'MainController#types', 'types');
+$router->map('GET','/type/[i:type]', 'MainController#type', 'type');
 
-    // require des models
+/* Match the current request */
+$match = $router->match();
 
-    require __DIR__ . '/../app/Models/CoreModel.php';
-    require __DIR__ . '/../app/Models/Pokemon.php';
-    require __DIR__ . '/../app/Models/Type.php';
-
-    $router = new AltoRouter();
-        
-    $router->setBasePath($_SERVER['BASE_URI']);
-
-    
-
-    // Page d'accueil qui affichera les pokémons
-
-    $router->map(
-        'GET',
-        '/',
-        [
-        'controller' => 'MainController',
-        'method' => 'homepage'
-        ],
-        'page_home'
-    );
-    
-    // Page type qui affichera les différents types de pokemon
-
-    $router->map(
-        'GET',
-        '/types',
-        [
-        'controller' => 'MainController',
-        'method' => 'typespage'
-        ],
-        'page_types'
-    );
-    
-    $match = $router->match();
-   
-
-     // On vérifie si la route a été trouvée par Altorouter
-     if($match !== false) {
-        // Si elle existe, elle contient les infos dont on a besoin, on les stocke dans une variable
-        $routeInfos = $match['target'];
-        
-          // Grâce à cette variable, on extrait le contrôleur à utiliser
-          $controller = $routeInfos['controller'];
-          // Puis la méthode à appeler sur ce contrôleur
-          $method = $routeInfos['method'];
-
-          // On vérifie s'il existe des paramètres transmis dans l'url (comme un id de personnage par exemple ?)
-        $urlParams = $match['params'];
-
-         // Puis on utilise la variable qui contient le nom du contrôleur qu'on a récupéré pour instancier la classe du contrôleur en question
-         $controller = new $controller; 
-
-         // L'objet $controller peut à présent appeler la méthode avec les paramètres éventuels
-         $controller->$method();
-
-        } else {
-            var_dump('erreur 404');
-            // Dans le cas où la route ne serait pas trouvée, on va utiliser 
-            // $controller = new MainController(); 
-            // $controller->pageNotFound();
-        }
+if($match !== false) {
+    // Je sépare les 2 parties se trouvant dans "target" ('MainController#home')
+    $controllerAndMethod = explode('#', $match['target']);
+    //dump($controllerAndMethod); // debug
+    // Je stocke les noms dans des variables en concaténant le namespace au nom du controller (pour éviter de le réécrire dans chaque route)
+    $controllerName = 'Pokedex\\Controllers\\' . $controllerAndMethod[0];
+    //echo '<br>$controllerName='.$controllerName.'<br>';
+    $methodName = $controllerAndMethod[1];
+    // J'instancie le controller
+    // PHP va remplacer la variable $controllerName par sa valeur
+    // puis va instancier la bonne classe "new MainController()" par exemple
+    $controller = new $controllerName();
+    // J'appelle la méthode correspond à la route
+    // PHP va remplacer la variable $methodName par sa valeur
+    // puis va appeler la bonne méthode "->home()" par exemple
+    // On passe en argument le tableau des paramètres dynamiques de la route matchée
+    $controller->$methodName($match['params']);
+} else {
+    // Si aucun match n'a été trouvé par AltoRouter,
+    // On envoie la page 404
+    $controller = new Pokedex\Controllers\MainController();
+    $controller->notFound();
+}

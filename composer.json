@@ -9,8 +9,7 @@
         }
     ],
     "require": {
-        "altorouter/altorouter": "^2.0",
-        "symfony/var-dumper": "^5.4"
+        "altorouter/altorouter": "^1.2"
     },
     "autoload": {
         "psr-4": {"Pokedex\\": "app/"}

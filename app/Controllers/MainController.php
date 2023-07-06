@@ -1,33 +1,73 @@
 <?php
 
-    class MainController {
+namespace Pokedex\Controllers;
 
-        public function homepage(){
-            // var_dump("affichage de la page d'accueil");  
-            $pokemonModel = new Pokemon();
-            $pokemonsFromModel = $pokemonModel->findAll();
-            $this->show('home' ,["pokemons" =>$pokemonsFromModel]);   
-                   
-        }
+use Pokedex\Models\Pokemon;
+use Pokedex\Models\Type;
 
-        public function typespage(){
-            // var_dump("affichage de la page créateurs");
-            $typeModel = new Type();
-            $typesFromModel = $typeModel->findAll();
-            $this->show('types' ,["types" =>$typesFromModel]); 
-            
-        }
+class MainController
+{
+    // Affichage de la liste (page d'accueil)
+    public function list()
+    {
+        $pokemonObject = new Pokemon();
+        $pokemons = $pokemonObject->findAll();
+        $this->show('list', [
+            'title' => 'Accueil',
+            'pokemons' => $pokemons
+        ]);
+    }
 
-        public function pageNotFound() {
-            $this->show('error404');
-        }
-        private function show($viewPage, $viewData =[]){
+    // Affichage du détail
+    public function detail($params)
+    {
+        $pokemonObject = new Pokemon();
+        $pokemon = $pokemonObject->find($params['numero']);
+        $types = $pokemon->getTypes();
+        $this->show('detail', [
+            'title' => 'Accueil',
+            'pokemon' => $pokemon,
+            'types' => $types
+        ]);
+    }
 
-            $absoluteURL = $_SERVER['BASE_URI']; 
-            
-            require __DIR__ . "/../views/header.tpl.php";
-            require __DIR__ . "/../views/$viewPage.tpl.php";
-            require __DIR__ . "/../views/footer.tpl.php";
-        }
+    // Affichage des types
+    public function types()
+    {
+        $typeObject = new Type();
+        $types =  $typeObject->findAll();
+        $this->show('types', [
+            'title' => 'Liste des types',
+            'types' => $types
+        ]);
+    }
 
-    };
+    // Affichage de la liste filtrée par type
+    public function type($params)
+    {
+        $pokemonObject = new Pokemon();
+        $pokemons = $pokemonObject->findByType($params['type']);
+        $this->show('list', [
+            'title' => 'Filtré par type',
+            'pokemons' => $pokemons
+        ]);
+    }
+
+
+    public function notFound()
+    {
+        header('HTTP/1.1 404 Not Found');
+        $this->show('error404', [
+            'title' => 'Page inexistante - 404'
+        ]);
+    }
+
+    public function show($viewName, $viewVars = [])
+    {
+        // On inclut les templates header et footer
+        // ainsi que celui mis en paramètre ($viewName)
+        include(__DIR__ . '/../views/header.tpl.php');
+        include(__DIR__ . '/../views/' . $viewName . '.tpl.php');
+        include(__DIR__ . '/../views/footer.tpl.php');
+    }
+}

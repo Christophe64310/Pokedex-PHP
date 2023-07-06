@@ -1,47 +1,35 @@
 <?php
 
-    class CoreModel {
+namespace Pokedex\Models;
 
-        protected $id;
-       protected $name;
+class CoreModel
+{
+    /** 
+     * Tous nos models ont les propriétés id et name en commun. On peut donc les extraire dans le model parent.
+     */
+    protected $id;
+    protected $name;
+    
 
-        /**
-         * Get the value of id
-         */ 
-        public function getId()
-        {
-                return $this->id;
-        }
+    /**
+     * De même pour les getters (pas besoin de setters dans ce projet)
+     */
 
-        /**
-         * Set the value of id
-         *
-         * @return  self
-         */ 
-        public function setId($id)
-        {
-                $this->id = $id;
-
-                return $this;
-        }
-
-       /**
-        * Get the value of name
-        */ 
-       public function getName()
-       {
-              return $this->name;
-       }
-
-       /**
-        * Set the value of name
-        *
-        * @return  self
-        */ 
-       public function setName($name)
-       {
-              $this->name = $name;
-
-              return $this;
-       }
+    /**
+     * Get the value of the name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+}
