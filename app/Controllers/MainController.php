@@ -13,7 +13,7 @@ class MainController
         $pokemonObject = new Pokemon();
         $pokemons = $pokemonObject->findAll();
         $this->show('list', [
-            'title' => 'Home',
+            'title' => 'Liste',
             'pokemons' => $pokemons
         ]);
     }
@@ -25,7 +25,7 @@ class MainController
         $pokemon = $pokemonObject->find($params['numero']);
         $types = $pokemon->getTypes();
         $this->show('detail', [
-            'title' => 'Home',
+            'title' => 'détail',
             'pokemon' => $pokemon,
             'types' => $types
         ]);
@@ -37,7 +37,7 @@ class MainController
         $typeObject = new Type();
         $types =  $typeObject->findAll();
         $this->show('types', [
-            'title' => 'List of Types',
+            'title' => 'Liste des types',
             'types' => $types
         ]);
     }
@@ -48,7 +48,7 @@ class MainController
         $pokemonObject = new Pokemon();
         $pokemons = $pokemonObject->findByType($params['type']);
         $this->show('list', [
-            'title' => 'Filtered by Type',
+            'title' => 'Filtre par type',
             'pokemons' => $pokemons
         ]);
     }

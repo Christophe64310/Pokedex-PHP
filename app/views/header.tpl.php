@@ -7,6 +7,8 @@
     <title><?= $viewVars['title'] ?></title>
     <link rel="stylesheet" href="<?= $_SERVER['BASE_URI']?>/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
+    <!-- Ajoutez la ligne suivante pour le favicon -->
+    <link rel="icon" type="image/x-icon" href="<?= $_SERVER['BASE_URI'] ?>/img/favicon.png">
 </head>
 <body>
     <header>
