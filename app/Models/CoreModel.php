@@ -5,14 +5,13 @@ namespace Pokedex\Models;
 class CoreModel
 {
     /** 
-     * Tous nos models ont les propriétés id et name en commun. On peut donc les extraire dans le model parent.
+     * All our models have the common properties id and name. We can extract them into the parent model.
      */
     protected $id;
     protected $name;
-    
 
     /**
-     * De même pour les getters (pas besoin de setters dans ce projet)
+     * Similarly for the getters (no need for setters in this project)
      */
 
     /**
@@ -24,6 +23,7 @@ class CoreModel
     {
         return $this->name;
     }
+
     /**
      * Get the value of id
      */
@@ -31,5 +31,4 @@ class CoreModel
     {
         return $this->id;
     }
-
 }

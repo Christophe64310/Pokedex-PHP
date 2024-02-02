@@ -73,3 +73,4 @@ else: ?>
         <a class="back" href="<?= $_SERVER['BASE_URI'] ?>">Revenir à la liste</a>
     </div>
 <?php endif;
+

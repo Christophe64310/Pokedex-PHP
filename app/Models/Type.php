@@ -9,13 +9,13 @@ class Type extends CoreModel
 {
 
     /** 
-     * Propriétés stockant les informations du type
+     * Properties storing type information
      */
     private $color;
 
     /**
-     * Création de getters  (pas besoin de setters pour notre utilisation !
-     * afin de récupérer les valeurs des propriétés
+     * Creation of getters (no need for setters for our use case!)
+     * to retrieve the values of the properties
      */
 
     public function getColor()
@@ -24,7 +24,7 @@ class Type extends CoreModel
     }
 
     /** 
-     * Méthode permettant de récupérer la liste des types
+     * Method to retrieve the list of types
      */
     public function findAll()
     {
@@ -32,13 +32,13 @@ class Type extends CoreModel
                 FROM `type` 
                 ORDER BY `name`";
 
-        // On récupère la connexion à la BDD
+        // Retrieve the connection to the database
         $pdo = Database::getPDO();
 
-        // On exécute la requête
+        // Execute the query
         $pdoStatement = $pdo->query($sql);
 
-        // On récupère tous les résultats avec "fetchAll" et on met transmet les données récupérées à une instance du model courant (Pokemon)
+        // Fetch all results with "fetchAll" and pass the retrieved data to an instance of the current model (Type)
         $types = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
 
         return $types;

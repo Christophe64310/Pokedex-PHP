@@ -4,12 +4,11 @@ namespace Pokedex\Models;
 
 use Pokedex\Utils\Database;
 use PDO;
-use Pokedex\Models\Type;
 
 class Pokemon extends CoreModel
 {
-    /** 
-     * Propriétés stockant les informations du pokémon
+    /**
+     * Properties storing Pokemon information
      */
     private $hp;
     private $attack;
@@ -20,8 +19,8 @@ class Pokemon extends CoreModel
     private $number;
 
     /**
-     * Création de getters  (pas besoin de setters pour notre utilisation !
-     * afin de récupérer les valeurs des propriétés
+     * Creation of getters (no need for setters for our use case!)
+     * to retrieve the values of the properties
      */
 
     public function getHp()
@@ -59,8 +58,8 @@ class Pokemon extends CoreModel
         return $this->number;
     }
 
-    /** 
-     * Méthode permettant de récupérer la liste des pokémon classés par numéros
+    /**
+     * Method to retrieve the list of Pokemon ordered by numbers
      */
     public function findAll()
     {
@@ -68,20 +67,20 @@ class Pokemon extends CoreModel
                 FROM `pokemon` 
                 ORDER BY `number`";
 
-        // On récupère la connexion à la BDD
+        // Retrieve the connection to the database
         $pdo = Database::getPDO();
 
-        // On exécute la requête
+        // Execute the query
         $request = $pdo->query($sql);
 
-        // On récupère tous les résultats avec "fetchAll" et on met transmet les données récupérées à une instance du model courant (Pokemon)
+        // Fetch all results with "fetchAll" and pass the retrieved data to an instance of the current model (Pokemon)
         $pokemons = $request->fetchAll(PDO::FETCH_CLASS, self::class);
 
         return $pokemons;
     }
 
-    /** 
-     * Méthode permettant de récupérer les informations d'un pokémon
+    /**
+     * Method to retrieve the information of a Pokemon
      */
     public function find($number)
     {
@@ -90,64 +89,64 @@ class Pokemon extends CoreModel
                 WHERE `number` = {$number}
                 LIMIT 1";
 
-        // On récupère la connexion à la BDD
+        // Retrieve the connection to the database
         $pdo = Database::getPDO();
 
-        // On exécute la requête avec query car on souhaite pouvoir accéder
-        // aux données retournées par la requête
+        // Execute the query with query as we want to access
+        // the data returned by the query
         $pdoStatement = $pdo->query($sql);
 
-        // On récupère le résultat et on instancie la classe courante avec les infos récupérées
+        // Fetch the result and instantiate the current class with the retrieved information
         $pokemon = $pdoStatement->fetchObject(self::class);
 
         return $pokemon;
     }
 
-    /** 
-     * Méthode permettant de récupérer une liste de pokémons par type
+    /**
+     * Method to retrieve a list of Pokemon by type
      */
     public function findByType($typeId)
     {
-        // On joint la table de pivot "pokemon_type" afin de pouvoir filtrer sur les ID de type
+        // Join the pivot table "pokemon_type" to filter on type IDs
         $sql = "SELECT *
                 FROM `pokemon` 
                 INNER JOIN `pokemon_type` ON `pokemon_type`.`pokemon_number` = `pokemon`.`number`
                 WHERE `pokemon_type`.`type_id` = {$typeId}
                 ORDER BY `pokemon`.`number`";
 
-        // On récupère la connexion à la BDD
+        // Retrieve the connection to the database
         $pdo = Database::getPDO();
 
-        // On exécute la requête avec query car on souhaite pouvoir accéder
-        // aux données retournées par la requête
+        // Execute the query with query as we want to access
+        // the data returned by the query
         $pdoStatement = $pdo->query($sql);
 
-        // On récupère tous les résultats avec "fetchAll" et on met transmet les données récupérées à une instance du model courant (Pokemon)
+        // Fetch all results with "fetchAll" and pass the retrieved data to an instance of the current model (Pokemon)
         $pokemons = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
 
         return $pokemons;
     }
 
     /**
-     * Méthode permettant de récupérer les types du Pokémon courant
+     * Method to retrieve the types of the current Pokemon
      */
     public function getTypes()
     {
-        // On cherche dans la table de pivot "pokemon_type" les entrées qui correspondent au numéro fourni
-        // puis on joint cette table à la table "type" dont on récupère les champs
+        // Search in the pivot table "pokemon_type" for entries that match the provided number
+        // then join this table with the "type" table and retrieve the fields
         $sql = "SELECT `type`.*
                 FROM `pokemon_type`
                 INNER JOIN `type` ON `type`.`id` = `pokemon_type`.`type_id`
                 WHERE `pokemon_type`.`pokemon_number` = {$this->getNumber()}";
 
-        // On récupère la connexion à la BDD
+        // Retrieve the connection to the database
         $pdo = Database::getPDO();
 
-        // On exécute la requête avec query car on souhaite pouvoir accéder
-        // aux données retournées par la requête
+        // Execute the query with query as we want to access
+        // the data returned by the query
         $pdoStatement = $pdo->query($sql);
 
-        // On récupère le résultat  et on instancie la classe Type avec les infos récupérées
+        // Fetch the result and instantiate the Type class with the retrieved information
         $types = $pdoStatement->fetchAll(PDO::FETCH_CLASS, Type::class);
 
         return $types;
