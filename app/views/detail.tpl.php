@@ -18,8 +18,9 @@ else: ?>
                     <ul>
                         <?php 
                         foreach($types as $type):
-                            echo "<li class='type' style='background:#".$type->getColor()."'>" . $type->getName() . "</li>";              
+                            echo "<li><a href='" . $_SERVER['BASE_URI'] . '/type/' . $type->getId() . "' style='background:#" . $type->getColor() . "'>" . $type->getName() . "</a></li>";             
                         endforeach; 
+                        
                         ?>
                     </ul>
                 </div>
